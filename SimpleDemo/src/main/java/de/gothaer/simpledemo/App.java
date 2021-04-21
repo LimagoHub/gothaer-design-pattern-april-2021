@@ -1,13 +1,15 @@
 package de.gothaer.simpledemo;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-    }
+import de.gothaer.simpledemo.client.CalcClient;
+import de.gothaer.simpledemo.math.Calculator;
+import de.gothaer.simpledemo.math.CalculatorImpl;
+
+public class App {
+
+	public static void main(final String[] args) {
+		final Calculator calculator = new CalculatorImpl();
+		new CalcClient(calculator).run();
+
+	}
+
 }
