@@ -1,7 +1,7 @@
 package de.tiere;
 
 public class Schwein {
-	
+	public static final int INITIAL_WEIGHT = 10;
 	private String name;
 	private int gewicht;
 	
@@ -10,7 +10,7 @@ public class Schwein {
 		this("nobody");
 	}
 	public Schwein(final String name) {
-		setGewicht(10);
+		setGewicht(INITIAL_WEIGHT);
 		setName(name);
 	}
 	public String getName() {
