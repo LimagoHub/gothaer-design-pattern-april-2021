@@ -1,6 +1,7 @@
 package de.gothaer.personendemo.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import de.gothaer.personendemo.repositories.models.Person;
 import de.gothaer.personendemo.repositories.models.PersonRepository;
@@ -16,6 +17,29 @@ public class PersonServiceImpl {
 		
 		this.repo = repo;
 		this.antipathen = antipathen;
+	}
+	
+	/*
+	 * John Doe
+	 * John Wayne
+	 * John McClaine
+	 * John Rambo
+	 * John Wick
+	 *  
+	 * John Boy Walton
+	 * 
+	 * Max Mustermann
+	 * 
+	 * 
+	 */
+	public List<Person> findeAlleJohns() throws PersonServiceException {
+		
+		try {
+			repo.findAll();
+			return null;
+		} catch (final RuntimeException e) {
+			throw new PersonServiceException("Upps",e);
+		}
 	}
 
 	/*
@@ -40,9 +64,19 @@ public class PersonServiceImpl {
 		}
 
 	}
+	
+	
+	public void speichern(final String vorname, final String nachname) throws PersonServiceException {
+	
+			speichern(new Person(vorname, nachname));
+
+	}
+	
+
 
 	private void speichernImpl(final Person person) throws PersonServiceException {
 		checkPerson(person);
+		person.setId(UUID.randomUUID().toString());
 		repo.save(person);
 	}
 

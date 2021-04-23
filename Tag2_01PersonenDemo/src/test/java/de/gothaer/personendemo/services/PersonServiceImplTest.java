@@ -1,14 +1,18 @@
 package de.gothaer.personendemo.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -86,11 +90,43 @@ public class PersonServiceImplTest {
 		when(antipathenMock.contains(Mockito.anyString())).thenReturn(false);
 		objectUnderTest.speichern(validPerson);
 		
+		assertNotNull(validPerson.getId());
+		
 		final InOrder inOrder = Mockito.inOrder(antipathenMock, repoMock);
 		
 		inOrder.verify(antipathenMock,Mockito.times(1)).contains(Mockito.anyString());
 		inOrder.verify(repoMock, Mockito.times(1)).save(validPerson);
 		
+	}
+
+	
+	@Captor
+	private ArgumentCaptor<Person> personCaptor;
+	
+	@Test
+	void speichern_VarianteNummer2() throws Exception{
+		when(antipathenMock.contains(Mockito.anyString())).thenReturn(false);
+		objectUnderTest.speichern("Max","Mustermann");
+		
+			
+		
+		verify(repoMock).save(personCaptor.capture());
+		
+		final Person ergebnis = personCaptor.getValue();
+		
+		assertNotNull( ergebnis.getId());
+		assertEquals(36,  ergebnis.getId().length());
+		assertEquals("Max", personCaptor.getValue().getVorname());
+		assertEquals("Mustermann", personCaptor.getValue().getNachname());
+		
+	}
+	
+	@Test
+	void findeAlleJohns_RuntimeExceptionInUnderLyingServie_throwsPersonServiceException() {
+		
+		when(repoMock.findAll()).thenThrow(new RuntimeException("Hallo"));
+		
+		assertThrows(PersonServiceException.class, ()->objectUnderTest.findeAlleJohns());
 	}
 
 	
